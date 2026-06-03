@@ -442,6 +442,8 @@
             <input type="checkbox" id="f-privacy" name="privacy">
             <span><a href="https://skimagolf.com/privacypolicy/" target="_blank" rel="noopener">プライバシーポリシー</a>に同意のうえ送信します<span class="err" style="margin-top:4px">同意が必要です</span></span>
           </label>
+          <!-- スパム対策ハニーポット（人間には非表示／botが入力すると弾く） -->
+          <input type="text" id="f-honey" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
           <button type="submit" class="btn btn-primary" id="submit-btn">まずは無料資料を受け取る <span class="btn-arrow">→</span></button>
         </div>
       </form>

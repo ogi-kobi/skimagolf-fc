@@ -97,6 +97,11 @@
     });
   });
 
+  // FormSubmit（formsubmit.co）のAJAXエンドポイント。
+  // 静的ホスティング（GitHub Pages）からでも info@skimagolf.com へメール送信できる。
+  // ※初回の1回だけ info@skimagolf.com に届く有効化メールのリンクを承認する必要あり。
+  var FORM_ENDPOINT = 'https://formsubmit.co/ajax/info@skimagolf.com';
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var ok = true;
@@ -113,31 +118,52 @@
       }
       return;
     }
-    // success — compose a mail to info@skimagolf.com with entered values
+
     var name = (document.getElementById('f-name') || {}).value || '';
     var email = (document.getElementById('f-email') || {}).value || '';
     var tel = (document.getElementById('f-tel') || {}).value || '';
     var stageEl = document.querySelector('input[name="stage"]:checked');
     var stage = stageEl ? stageEl.value : '';
     var msg = (document.getElementById('f-msg') || {}).value || '';
-    var subject = '【スキマゴルフFC】無料資料請求 - ' + name;
-    var body = [
-      'スキマゴルフFC 資料請求',
-      '',
-      'お名前：' + name,
-      'メール：' + email,
-      '電話番号：' + tel,
-      'ご検討の段階：' + stage,
-      'ご質問・ご要望：' + msg
-    ].join('\n');
-    var mailto = 'mailto:info@skimagolf.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    window.location.href = mailto;
 
-    successMsg.innerHTML = 'メールソフトを起動しました。<br>内容をご確認のうえ送信してください。';
-    fields.style.display = 'none';
-    success.classList.add('show');
-    var toggle = document.querySelector('.toggle-cta');
-    if (toggle) toggle.style.display = 'none';
-    window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
+    var payload = {
+      'お名前': name,
+      'メールアドレス': email,
+      '電話番号': tel,
+      'ご検討の段階': stage,
+      'ご質問・ご要望': msg,
+      '_subject': '【スキマゴルフFC】無料資料請求 - ' + name,
+      '_template': 'table',
+      '_captcha': 'false',
+      '_honey': (document.getElementById('f-honey') || {}).value || ''
+    };
+
+    // 送信中はボタンを無効化＆ラベル変更（二重送信防止）
+    var btnHtml = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '.7';
+    submitBtn.innerHTML = '送信中…';
+
+    fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) { return res.json().catch(function () { return {}; }).then(function (j) { return { ok: res.ok, body: j }; }); })
+      .then(function (r) {
+        // FormSubmitは success:"true"（文字列）を返す。失敗時は success:"false" + message。
+        var success_ok = r.ok && (r.body.success === 'true' || r.body.success === true);
+        if (!success_ok) throw new Error((r.body && r.body.message) || '送信に失敗しました');
+        successMsg.innerHTML = 'ご請求ありがとうございます。<br>担当より資料をお送りいたします。';
+        fields.style.display = 'none';
+        success.classList.add('show');
+        window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
+      })
+      .catch(function (err) {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '';
+        submitBtn.innerHTML = btnHtml;
+        alert('送信に失敗しました。お手数ですが、お電話（080-2137-2435）またはinfo@skimagolf.com宛にご連絡ください。\n\n（' + (err && err.message ? err.message : 'ネットワークエラー') + '）');
+      });
   });
 })();
