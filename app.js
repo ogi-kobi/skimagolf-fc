@@ -100,7 +100,7 @@
   // FormSubmit（formsubmit.co）のAJAXエンドポイント。
   // 静的ホスティング（GitHub Pages）からでも info@skimagolf.com へメール送信できる。
   // ※初回の1回だけ info@skimagolf.com に届く有効化メールのリンクを承認する必要あり。
-  var FORM_ENDPOINT = 'https://formsubmit.co/ajax/info@skimagolf.com';
+  var FORM_ENDPOINT = 'https://formsubmit.co/ajax/ogi@atomic-heart.co.jp';
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
