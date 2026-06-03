@@ -221,8 +221,9 @@ body[data-fv="c"] .fv-c{ display:block; }
 .about-callout > p{ font-size:14.5px; line-height:1.95; color:var(--ink); font-weight:500; margin-top:14px; }
 .about-callout > p b{ color:var(--accent-deep); font-weight:800; }
 .about-callout-bridge{ font-weight:800 !important; color:var(--navy) !important; margin-top:16px !important; }
-.about-tags{ display:grid; grid-template-columns:repeat(4,1fr); gap:9px; margin-top:14px; }
-.about-tag{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; aspect-ratio:1/1; background:#fff; border:1.5px solid var(--blue); color:var(--navy); font-weight:800; font-size:12.5px; line-height:1.35; text-align:center; padding:6px; border-radius:14px; box-shadow:var(--shadow-sm); }
+.about-tags{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:14px; }
+.about-tag{ min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; aspect-ratio:1/1; background:#fff; border:1.5px solid var(--blue); color:var(--navy); font-weight:800; font-size:12.5px; line-height:1.35; text-align:center; padding:6px; border-radius:14px; box-shadow:var(--shadow-sm); }
+@media (min-width:560px){ .about-tags{ grid-template-columns:repeat(4,1fr); gap:9px; } }
 .about-tag svg{ width:24px; height:24px; color:var(--blue); flex:none; }
 .about-tag-txt{ display:block; }
 .about-callout-foot{ font-size:15px; font-weight:800; color:var(--navy); margin-top:14px; text-align:right; }
